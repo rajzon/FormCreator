@@ -4,5 +4,5 @@ interface Field {
     fieldType: FieldType;
     value: string;
 
-    render(): string ;
+    render(parentElement:HTMLElement);
 }

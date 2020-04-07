@@ -2,7 +2,7 @@ enum FieldType {
     textField,
     multiLineField,
     date,
-    mail,
+    email,
     selectField,
     checkboxField
 }
