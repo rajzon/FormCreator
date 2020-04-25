@@ -4,10 +4,11 @@ class EmailField implements Field  {
     value: string;
 
    
-    constructor(name:string , value:string) {
+    constructor(name:string , value:string , label:string) {
         this.name = name;
         this.value = value;
         this.fieldType = FieldType.email;
+        this.label = label;
         
 
     }
@@ -16,10 +17,10 @@ class EmailField implements Field  {
       
         
         var emailField = document.createElement('input');
-        
+         emailField.id = this.label
         //Name Label
         const nameLabel = new FieldLabel(this.name);
-            nameLabel.DisplayLabel(container);
+            nameLabel.DisplayLabel(parentElement,emailField.id);
 
         //Creating email Input field
         emailField.type="email";       
@@ -28,23 +29,17 @@ class EmailField implements Field  {
         parentElement.appendChild(document.createElement("br"));
         parentElement.appendChild(document.createElement("br"));
 
-        
-        
-       //return "TO jest EmailField";
+
+       
     }
+
+    getValue()  {
+        var input = <HTMLInputElement>document.getElementById(this.label);          
+        this.value = input.value;
+        
+
+      
+      }
 
 
 }
-
-//var container = document.getElementById('container');
-//const emailField = new EmailField("Email" , "Wprowadź mail");
-
-
-//var input = document.createElement('input');
-
-     //   input.type="text";       
-    //    container.appendChild(input);
-
-     //   container.appendChild(document.createElement("br"));
-     //   container.appendChild(document.createElement("br"));
-//emailField.render(container);

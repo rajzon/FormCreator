@@ -7,3 +7,4 @@ var FieldType;
     FieldType[FieldType["selectField"] = 4] = "selectField";
     FieldType[FieldType["checkboxField"] = 5] = "checkboxField";
 })(FieldType || (FieldType = {}));
+//# sourceMappingURL=FieldType.js.map

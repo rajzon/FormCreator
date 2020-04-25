@@ -3,24 +3,27 @@ class CheckboxField  implements Field {
     fieldType: FieldType;
     value: string;
 
-    constructor(name:string ,value:string) {
+    constructor(name:string ,value:string,label:string) {
         this.name = name;    
         this.fieldType = FieldType.checkboxField;
         this.value = value;
+        this.label = label;
     }
 
     render(parentElement:HTMLElement) {
 
         //Declaring 2 Checkbox options
+        //First Option
         var checkboxField = document.createElement('input');
-        
+        checkboxField.className = this.label;
         checkboxField.type='checkbox';
         checkboxField.value='Yes';
         var checkboxFieldLabel = document.createElement('label');
         checkboxFieldLabel.textContent='Tak'
 
-        var checkboxFieldSecond = document.createElement('input');
-       
+        //Second Option
+        var checkboxFieldSecond = document.createElement('input'); 
+        checkboxFieldSecond.className = this.label;      
         checkboxFieldSecond.type='checkbox';
         checkboxFieldSecond.value='No';
         var checkboxFieldLabelSecond = document.createElement('label');
@@ -28,7 +31,9 @@ class CheckboxField  implements Field {
 
         //Name Label
         const nameLabel = new FieldLabel(this.name);
-            nameLabel.DisplayLabel(container);
+            nameLabel.DisplayLabel(parentElement,checkboxField.id);
+
+        
 
         //Creating CheckBoxes
             
@@ -50,6 +55,25 @@ class CheckboxField  implements Field {
         parentElement.appendChild(document.createElement("br"));
 
     }
+
+    getValue()  {
+        this.value ="";
+        var input = <HTMLCollectionOf<HTMLInputElement>>document.getElementsByClassName(this.label);
+        for (let index = 0; index < input.length; index++) {
+
+            if(input[index].checked) {
+            this.value += input[index].value +' ';
+            }    
+                  
+        }
+         
+            
+        
+        //this.value = input.value;
+        
+
+      
+      }
 
 
 }

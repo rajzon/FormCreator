@@ -3,35 +3,42 @@ class InputField implements Field {
     fieldType: FieldType;
     value: string;
 
-    constructor(name:string ,value:string) {
+    constructor(name:string ,value:string, label:string) {
         this.name = name;    
         this.fieldType = FieldType.textField;
         this.value = value;
+        this.label = label;
     }
 
     render(parentElement:HTMLElement) {
          
-        var inputField = document.createElement('input');
-        
+        console.log(this.value);
+
+        var inputField = document.createElement('input');       
+        inputField.id = this.label;  
+               
         //Name Label
         const nameLabel = new FieldLabel(this.name);
-            nameLabel.DisplayLabel(container);
+            nameLabel.DisplayLabel(parentElement , inputField.id);
 
         //Creating email Input field
-        inputField.type="text";       
+        inputField.type="text";
+        inputField.value = this.value;         
         parentElement.appendChild(inputField);
-         this.value = inputField.value;
+        
         parentElement.appendChild(document.createElement("br"));
         parentElement.appendChild(document.createElement("br"));
     }
+
+     getValue()  {
+        var input = <HTMLInputElement>document.getElementById(this.label);          
+        this.value = input.value;
+        console.log(input.value);
+
+      
+      }
 
 
     
 
 }
-//var container = document.getElementById('container');
-//const inputField = new InputField("Imię" , "Wprowadź imię");
-
-
-
-//inputField.render(container);

@@ -1,14 +1,16 @@
 var FieldLabel = /** @class */ (function () {
-    function FieldLabel(label) {
-        this.label = label;
+    function FieldLabel(name) {
+        this.name = name;
     }
-    FieldLabel.prototype.DisplayLabel = function (parentElement) {
+    FieldLabel.prototype.DisplayLabel = function (parentElement, label) {
         var labelField = document.createElement('label');
-        labelField.textContent = this.label;
+        labelField.textContent = this.name;
+        labelField.htmlFor = label;
         parentElement.appendChild(labelField);
         parentElement.appendChild(document.createElement("br"));
         parentElement.appendChild(document.createElement("br"));
-        console.log(this.label);
+        console.log(this.name);
     };
     return FieldLabel;
 }());
+//# sourceMappingURL=FieldLabel.js.map

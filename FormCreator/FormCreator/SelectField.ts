@@ -3,17 +3,19 @@ class SelectField implements Field  {
     fieldType: FieldType;
     value: string;
 
-    constructor(name:string ,value:string) {
+    constructor(name:string ,value:string , label:string) {
         this.name = name;    
         this.fieldType = FieldType.selectField;
         this.value = value;
+        this.label = label;
     }
     render(parentElement:HTMLElement) {
         var selectField = document.createElement('select');
-        
+        selectField.id = this.label;
+
         //Name Label
         const nameLabel = new FieldLabel(this.name);
-            nameLabel.DisplayLabel(container);
+            nameLabel.DisplayLabel(parentElement , selectField.id);
 
         //Creating Select field
               
@@ -26,12 +28,31 @@ class SelectField implements Field  {
         option2.text = "Zarządzanie i Bankowość";
         var option3 = document.createElement("option");
         option3.text = "Medycyna";
-        var infSelected = selectField.add(option);
-        var managmentSelected = selectField.add(option2);  
-        var medicineSelected = selectField.add(option3); 
+         selectField.add(option);
+         selectField.add(option2);  
+         selectField.add(option3); 
         
         parentElement.appendChild(document.createElement("br"));
         parentElement.appendChild(document.createElement("br"));
+    }
+
+    getValue()  {
+        //this.value ="";
+        //var input = <HTMLCollectionOf<HTMLOptionElement>>document.getElementsByClassName(this.label);
+        var input = <HTMLSelectElement>document.getElementById(this.label)
+        var options = input.selectedOptions;
+        
+        for (let index = 0; index < options.length; index++) {
+           if(options[index].selected) {
+            this.value = options[index].value;           
+            return;
+           }
+               
+                  
+        }
+        
+ 
+       
     }
 
 

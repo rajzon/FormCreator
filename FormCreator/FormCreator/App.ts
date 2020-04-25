@@ -1,32 +1,23 @@
 
 
 class App {
-    /*
+    container: HTMLElement;
+
+    constructor(container: HTMLElement) {
+        this.container = container;
+    }
+
     ShowForm() {
         
-        const nameField = new InputField("Imię" , "Wprowadź imię");
-        nameField.render(container);
-
-        const surNameField = new InputField("Nazwisko" , "Wprowadź nazwisko");
-        surNameField.render(container);
-
-        const emailField = new EmailField("E-mail" , "Wprowadź mail");
-        emailField.render(container);
-
-        const studyField = new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek");
-        studyField.render(container);
-
-        const elearningAnswearField = new CheckboxField("Czy preferujesz e-learning" , "Domyślny tekst");
-        elearningAnswearField.render(container);
-
-        const commentField = new TextAreaField("Uwagi" , "Domyślny tekst");
-        commentField.render(container);
+        var form = new Form();
+        form.render(this.container);
     }
-    */
+    
 }
-//var container = document.getElementById('container');
-//const app = new App();
-//app.ShowForm();
+const container = document.getElementById('container');
+var app = new App(container);
+app.ShowForm();
+
 
 
 
