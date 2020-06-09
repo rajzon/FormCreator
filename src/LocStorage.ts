@@ -20,7 +20,7 @@ export class LocStorage implements IDataStorage {
     }
 
     getDocuments(): string[] {
-        let idsToReturn = [];
-        return this.ids;
+        let idsToReturn = Object.keys(localStorage);
+        return idsToReturn;
     }
 }

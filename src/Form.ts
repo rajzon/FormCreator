@@ -81,7 +81,7 @@ export class Form {
         closeButton.value='Wstecz';
         closeButton.addEventListener('click',() => {
             //do poprawy
-            window.location.href = '/Index.html'
+            window.location.href = 'Index.html'
         });
 
         
