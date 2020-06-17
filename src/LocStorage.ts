@@ -9,18 +9,42 @@ export class LocStorage implements IDataStorage {
     saveDocuments(formValues: Array<IField>): string {
         console.log('test');
         this.id=Date.now().toString();
-        localStorage.setItem(this.id.toString(), JSON.stringify(formValues) );
+        localStorage.setItem(this.id.toString(), JSON.stringify(formValues));
         this.ids.push(this.id);
         console.log(localStorage.getItem(this.id));
         return this.id;
-    }   
+    }
     
-    loadDocument() {
-        throw new Error("Method not implemented.");
+    editDocument(id: string, formValues: Array<IField>) {
+        const valuesToEdit = JSON.stringify(formValues);
+        localStorage.setItem(id,valuesToEdit);
+    }
+    
+    loadDocument(id: string): string {
+       const documentToReturn = localStorage.getItem(id);
+       if(documentToReturn == null) {
+           console.log('Document doesnt exits');
+           return;
+       } else {
+
+           return documentToReturn;
+       }
     }
 
     getDocuments(): string[] {
         let idsToReturn = Object.keys(localStorage);
         return idsToReturn;
+    }
+
+    removeDocument(id: string) {
+        if (localStorage.getItem(id).length > 0){
+         localStorage.removeItem(id);
+         if(localStorage.getItem(id) == null) {
+         console.log(`selected document:${id} - deleted successfully`);
+         } else {
+             console.log(`something went wrong during deleting document:${id}`);
+         }
+        }
+        
     }
 }

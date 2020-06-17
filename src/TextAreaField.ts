@@ -16,12 +16,13 @@ export class TextAreaField implements IField {
     render(parentElement:HTMLElement) {
         var textareaField = document.createElement('textarea');
         textareaField.id = this.label;
+        textareaField.value = this.value;
         
         //Name Label
         const nameLabel = new FieldLabel(this.name);
             nameLabel.DisplayLabel(parentElement,textareaField.id);
 
-        //Creating Select field
+        //Append textArea field
               
          parentElement.appendChild(textareaField);  
 

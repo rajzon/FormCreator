@@ -11,7 +11,7 @@ export class App {
     ShowForm() {
         
         var form = new Form();
-        form.render(this.container);
+        form.render(this.container,true);
         console.log(form.fields);
     }
 }

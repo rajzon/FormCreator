@@ -1,3 +1,4 @@
+import { FieldType } from './FieldType.enum';
 import { IField } from "./IField";
 import { InputField } from "./InputField";
 import { EmailField } from "./EmailField";
@@ -21,8 +22,8 @@ export class Form {
 
         this.fields.push(this.nameField = new InputField("Imię" , "Wprowadź imię","name"),
                          this.surNameField = new InputField("Nazwisko" , "Wprowadź nazwisko" , "surName"),
-                        this.emailField =  new EmailField("E-mail" , "Wprowadź mail", "email"),
-                        this.studyField = new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek","study"),
+                         this.emailField =  new EmailField("E-mail" , "Wprowadź mail", "email"),
+                         this.studyField = new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek","study"),
                          this.elearningAnswearField  = new CheckboxField("Czy preferujesz e-learning" , "Domyślny tekst","elearning"),
                          this.commentField = new TextAreaField("Uwagi" , "Domyślny tekst", "comment"),
                          
@@ -32,12 +33,12 @@ export class Form {
 
     getValue() {
         console.log(this.fields);      
-        this.nameField.getValue();
-        this.surNameField.getValue();
-        this.emailField.getValue();
-        this.commentField.getValue();
-        this.elearningAnswearField.getValue();
-        this.studyField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.textField && n.label === 'name').value = this.nameField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.textField && n.label === 'surName').value = this.surNameField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.email).value = this.emailField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.multiLineField).value = this.commentField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.checkboxField).value = this.elearningAnswearField.getValue();
+        this.fields.find(n => n.fieldType === FieldType.selectField).value = this.studyField.getValue();
         //console.log(val);    
         console.log(this.nameField.value);
             alert(`Imię: ${this.nameField.value} , Nazwisko:${this.surNameField.value} , Email:${this.emailField.value} , 
@@ -60,33 +61,37 @@ export class Form {
         }
       }
 
-    render(parentElement:HTMLElement) {
+    render(parentElement:HTMLElement, creationMode: boolean) {
          
         var formContainer = document.createElement('form');
 
         parentElement.appendChild(formContainer);
 
-        this.fields.forEach(element => {
+        console.log(this.fields);
+        this.fields.forEach( (element: IField) => {
             element.render(formContainer);
         });
             console.log(this.nameField.value);
-        
-        const submitButton = document.createElement('input');
-        submitButton.type='button';
-        submitButton.value="Wyślij";
-        submitButton.addEventListener("click",this);
+            
+        if (creationMode == true) 
+        {
+            const submitButton = document.createElement('input');
+            submitButton.type='button';
+            submitButton.value="Wyślij";
+            submitButton.addEventListener("click",this);
 
-        const closeButton = document.createElement('input');
-        closeButton.type='button';
-        closeButton.value='Wstecz';
-        closeButton.addEventListener('click',() => {
-            //do poprawy
-            window.location.href = 'Index.html'
-        });
+            const closeButton = document.createElement('input');
+            closeButton.type='button';
+            closeButton.value='Wstecz';
+            closeButton.addEventListener('click',() => {
+                //do poprawy
+                window.location.href = 'Index.html'
+            });
 
-        
-        formContainer.appendChild(submitButton);
-        formContainer.appendChild(closeButton);
+            
+            formContainer.appendChild(submitButton);
+            formContainer.appendChild(closeButton);
+        }
 
     }  
     

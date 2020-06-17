@@ -34,7 +34,17 @@ export class SelectField implements IField {
         option3.text = "Medycyna";
          selectField.add(option);
          selectField.add(option2);  
-         selectField.add(option3); 
+         selectField.add(option3);
+         
+         //Checking if the user already pass the value that exits as an option in select object 
+         //if it is , set that value as selected option
+         for (let i = 0; i < selectField.options.length; i++) {
+             if(selectField.options[i].value === this.value) {
+                 selectField.options[i].selected = true;
+                 console.log('option selected');
+             }            
+         }
+
         
         parentElement.appendChild(document.createElement("br"));
         parentElement.appendChild(document.createElement("br"));
