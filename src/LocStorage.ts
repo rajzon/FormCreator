@@ -9,6 +9,7 @@ export class LocStorage implements IDataStorage {
     saveDocuments(formValues: Array<IField>): string {
         console.log('test');
         this.id=Date.now().toString();
+        console.log(formValues);
         localStorage.setItem(this.id.toString(), JSON.stringify(formValues));
         this.ids.push(this.id);
         console.log(localStorage.getItem(this.id));

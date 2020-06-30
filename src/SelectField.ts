@@ -6,8 +6,12 @@ export class SelectField implements IField {
     name: string;    label: string;
     fieldType: FieldType;
     value: string;
+    options: Array<string>;
 
-    constructor(name:string ,value:string , label:string) {
+    constructor(name:string ,value:string , label:string, options:Array<string>) {
+        this.options = new Array<string>();
+        this.options = options;
+
         this.name = name;    
         this.fieldType = FieldType.selectField;
         this.value = value;
@@ -26,15 +30,12 @@ export class SelectField implements IField {
          parentElement.appendChild(selectField);  
 
          //Dodawanie Opcji wyboru kirunku studiów
-        var option = document.createElement("option");
-        option.text = "Informatyka i Ekonometria";
-        var option2 = document.createElement("option");
-        option2.text = "Zarządzanie i Bankowość";
-        var option3 = document.createElement("option");
-        option3.text = "Medycyna";
-         selectField.add(option);
-         selectField.add(option2);  
-         selectField.add(option3);
+        this.options.forEach(element => {
+            const opt = document.createElement('option');
+            opt.text = element
+            selectField.add(opt);
+        });
+
          
          //Checking if the user already pass the value that exits as an option in select object 
          //if it is , set that value as selected option

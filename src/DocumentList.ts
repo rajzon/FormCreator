@@ -43,7 +43,8 @@ export class DocumentList {
         docToEdit.forEach(element => {
             switch (element.fieldType) {
                 case FieldType.checkboxField:
-                    element = new CheckboxField(element.name,element.value,element.label);
+                    var checkboxField = element as CheckboxField;
+                    element = new CheckboxField(element.name,element.value,element.label, checkboxField.checkboxOptions);
                     docToReturn.push(element);
                     break;
                 case FieldType.email:
@@ -55,7 +56,8 @@ export class DocumentList {
                     docToReturn.push(element);
                     break;
                 case FieldType.selectField:
-                    element = new SelectField(element.name, element.value, element.label);
+                    var selectField =  element as SelectField;
+                    element = new SelectField(element.name, element.value, element.label,selectField.options);
                     docToReturn.push(element);
                     break;
                 case FieldType.textField:

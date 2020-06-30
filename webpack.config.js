@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     index: "./src/index.ts",
     docList: "./src/docListIndex.ts",
-    editDocIndex: "./src/editDocIndex.ts"
+    editDocIndex: "./src/editDocIndex.ts",
+    newFormIndex: "./src/newFormIndex.ts"
   },
   output: {
     filename: "[name].js",

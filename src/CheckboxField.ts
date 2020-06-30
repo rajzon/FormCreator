@@ -6,8 +6,12 @@ export class CheckboxField implements IField {
     name: string;    label: string;
     fieldType: FieldType;
     value: string;
+    checkboxOptions: Array<string>;
 
-    constructor(name:string ,value:string,label:string) {
+    constructor(name:string ,value:string,label:string, options: Array<string>) {
+        this.checkboxOptions = new Array<string>();
+        this.checkboxOptions = options
+
         this.name = name;    
         this.fieldType = FieldType.checkboxField;
         this.value = value;
@@ -16,57 +20,35 @@ export class CheckboxField implements IField {
 
     render(parentElement:HTMLElement) {
 
-        //Declaring 2 Checkbox options
-        //First Option
-        var checkboxField = document.createElement('input');
-        checkboxField.className = this.label;
-        checkboxField.type='checkbox';
-        checkboxField.value='Yes';
-        var checkboxFieldLabel = document.createElement('label');
-        checkboxFieldLabel.textContent='Tak'
-
-        //Second Option
-        var checkboxFieldSecond = document.createElement('input'); 
-        checkboxFieldSecond.className = this.label;      
-        checkboxFieldSecond.type='checkbox';
-        checkboxFieldSecond.value='No';
-        var checkboxFieldLabelSecond = document.createElement('label');
-        checkboxFieldLabelSecond.textContent='Nie'
-
-        //Checking if the user already pass the value that exits in chceckboxes
-        //if it is , set that value as selected option
-        console.log(this.value);
-        if (checkboxField.value === this.value) {
-            checkboxField.checked = true;
-        } else if (checkboxFieldSecond.value === this.value) {
-            checkboxFieldSecond.checked = true;
-        }
-
         //Name Label
         const nameLabel = new FieldLabel(this.name);
-            nameLabel.DisplayLabel(parentElement,checkboxField.id);
+            nameLabel.DisplayLabel(parentElement);
+        console.log(this.checkboxOptions);
 
-        
+        this.checkboxOptions.forEach(element => {
+            const opt = document.createElement('input');
+            opt.type = 'checkbox';
+            opt.className = this.label;
+            opt.value = element;
+            var checkboxFieldLabel = document.createElement('label');
+            checkboxFieldLabel.textContent = element;
 
-        //Creating CheckBoxes
+
+            //Checking if the user already pass the value that exits in chceckboxes
+            //if it is , set that value as selected option
+            if(opt.value === this.value) {
+                opt.checked = true;
+            }
+
+            parentElement.appendChild(checkboxFieldLabel);
+            parentElement.appendChild(opt);
+
+            parentElement.appendChild(document.createElement("br"));
+
             
-        //Yes
-         parentElement.appendChild(checkboxFieldLabel);
-         parentElement.appendChild(checkboxField); 
-         
-         parentElement.appendChild(document.createElement("br"));
-
-
-         //No
-         parentElement.appendChild(checkboxFieldLabelSecond);
-         parentElement.appendChild(checkboxFieldSecond); 
-
-       
-  
-        
+        });
+      
         parentElement.appendChild(document.createElement("br"));
-        parentElement.appendChild(document.createElement("br"));
-
     }
 
     getValue()  {

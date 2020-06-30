@@ -7,7 +7,7 @@ export class FieldLabel {
        
     }
 
-    DisplayLabel(parentElement:HTMLElement , label:string) {
+    DisplayLabel(parentElement:HTMLElement , label?:string) {
         var labelField = document.createElement('label');
            labelField.textContent=this.name;
            //labelField.htmlFor = label;

@@ -2,6 +2,7 @@ import { IField } from './IField';
 import { FormCreator } from './FormCreator';
 import { DocumentList } from './DocumentList';
 import { Router } from './Router';
+import { Form } from './Form';
 
 
 const container = document.createElement('div');
@@ -15,15 +16,16 @@ console.log(documentToEdit);
 document.body.appendChild(container);
 
 
-const form = new FormCreator();
-form.newForm(container,documentToEdit);
+const form = new Form(documentToEdit);
+form.render(container,false);
+
 
 const editButton = document.createElement('button');
 editButton.textContent = 'Edit Document';
 editButton.addEventListener('click', () => {
-   form.saveForm();
+   form.save(false);
    console.log('form saved');
-   window.location.href = 'document-list.html';
+   //window.location.href = 'document-list.html';
 });
 
 container.appendChild(editButton);
