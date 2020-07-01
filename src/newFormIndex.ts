@@ -15,7 +15,7 @@ saveBtn.addEventListener('click', () => {
 const addFieldBtn = document.createElement('button');
 addFieldBtn.textContent = 'Add Next Field';
 addFieldBtn.addEventListener('click', () => {
-    formCreator.addNextField(conatiner);
+    formCreator.addRowToFormCreator(formCreator.form);
 });
 
 
