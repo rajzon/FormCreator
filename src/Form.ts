@@ -10,6 +10,7 @@ import { Router } from './Router';
 
 export class Form {
     fields: Array<IField>;
+    id: string;
     // public nameField: InputField;
     // surNameField: InputField;
     // emailField: EmailField;

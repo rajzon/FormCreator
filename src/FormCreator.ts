@@ -18,7 +18,10 @@ export class FormCreator {
     fieldType: HTMLSelectElement;
     fields: Array<IField>;
     formCreatorFields: Array<IFormCreatorField>;
-    selectFieldId: number;
+    locStorage: LocStorage = new LocStorage();
+
+    fieldId: number;
+
 
 
     constructor() {
@@ -26,7 +29,7 @@ export class FormCreator {
         this.formCreatorFields = new Array<IFormCreatorField>();
 
 
-        this.selectFieldId = 1; 
+        this.fieldId = 1;
     }
 
     newForm(parentElement: HTMLElement, fields?: Array<IField>) {
@@ -39,7 +42,8 @@ export class FormCreator {
 
     addRowToFormCreator(parentElement: HTMLFormElement) {
 
-       
+       const rowContainer = document.createElement('div');
+       rowContainer.id = `fieldId-${this.fieldId}`;
 
         this.fieldName = document.createElement('input');
         this.fieldName.placeholder = 'Nazwa pola...';
@@ -56,19 +60,21 @@ export class FormCreator {
         this.fieldDefaultValue.id = 'fieldDefaultValue';
         this.fieldDefaultValue.className = 'test';
 
-        this.fieldType = this.initFieldTypeSelection(parentElement);
+        this.fieldType = this.initFieldTypeSelection(rowContainer);
         this.fieldType.id = 'fieldType';
-        this.fieldType.className = 'test';
+        this.fieldType.className = 'fieldType';
 
 
 
-        
-        parentElement.appendChild(document.createElement('br'));
-        parentElement.appendChild(this.fieldName);
-        parentElement.appendChild(this.fieldLabel);
-        parentElement.appendChild(this.fieldDefaultValue);
-        parentElement.appendChild(this.fieldType);
+        parentElement.appendChild(rowContainer);
 
+        rowContainer.appendChild(document.createElement('br'));
+        rowContainer.appendChild(this.fieldName);
+        rowContainer.appendChild(this.fieldLabel);
+        rowContainer.appendChild(this.fieldDefaultValue);
+        rowContainer.appendChild(this.fieldType);
+
+        this.fieldId++;
     }
 
     getValues() {
@@ -87,16 +93,20 @@ export class FormCreator {
         
 
         
-        const test = document.getElementsByClassName('test');
+        const testFieldType = document.getElementsByClassName('fieldType');
         const fieldNameCollection = document.querySelectorAll('#fieldName');
         const fieldLabelCollection = document.querySelectorAll('#fieldLabel');
         const fieldDefaultValueCollection = document.querySelectorAll('#fieldDefaultValue');
-        const fieldTypeCollection = document.querySelectorAll('#fieldType');
+        const fieldTypeCollection = document.querySelectorAll('.fieldType');
 
-        console.log(test);
+        
+
+        console.log(testFieldType);
         console.log(fieldNameCollection);
+        console.log(fieldTypeCollection);
 
         if (fieldNameCollection.length === fieldLabelCollection.length && fieldNameCollection.length === fieldDefaultValueCollection.length && fieldNameCollection.length === fieldTypeCollection.length) {
+
         
             for (let index = 0; index < fieldNameCollection.length; index++) {
                 const fieldName =  <HTMLInputElement>fieldNameCollection[index];
@@ -104,42 +114,38 @@ export class FormCreator {
                 const fieldDefaultValue = <HTMLInputElement>fieldDefaultValueCollection[index];
                 const fieldType = <HTMLSelectElement>fieldTypeCollection[index];
 
-                
-                this.formCreatorFields.push(new FormCreatorField(fieldName.value, fieldLabel.value, fieldDefaultValue.value,fieldType.value))
-            
+
+                const currentFieldRow = fieldNameCollection[index].parentElement;
+                if(fieldType.value === 'select') {
+                    const selectOptions = currentFieldRow.querySelector('#selectOptionsContainer');
+                    let optionsForCurrentSelect = Array<string>();
+
+                    selectOptions.childNodes.forEach(el => {
+                        optionsForCurrentSelect.push((<HTMLInputElement>el.firstChild).value)
+                    }); 
+
+                    this.formCreatorFields.push(new FormCreatorField(fieldName.value, fieldLabel.value, fieldDefaultValue.value,fieldType.value,optionsForCurrentSelect))
+                } 
+                else if (fieldType.value === 'checkbox') { 
+                    const checkboxOptions = currentFieldRow.querySelector('#checkboxOptionsContainer');
+                    let optionsForCurrentCheckbox = Array<string>();
+
+                    checkboxOptions.childNodes.forEach(el => {
+                        optionsForCurrentCheckbox.push((<HTMLInputElement>el.firstChild).value)
+                    });
+                    
+
+                    this.formCreatorFields.push(new FormCreatorField(fieldName.value, fieldLabel.value, fieldDefaultValue.value, fieldType.value, null, optionsForCurrentCheckbox))
+                } else {
+                    this.formCreatorFields.push(new FormCreatorField(fieldName.value, fieldLabel.value, fieldDefaultValue.value,fieldType.value));
+                }
+
+
+        
             }
         }
         
         console.log(this.formCreatorFields);
-
-
-
-        // for (let index = 0; index < fieldNameCollection.length; index++) {
-        //     const element = <HTMLInputElement>fieldNameCollection[index];
-        //     fieldNameCollectionResult.push(element.value);
-        //     console.log(element.value);
-        // }
-
-        // for (let index = 0; index < fieldLabelCollection.length; index++) {
-        //     const element = <HTMLInputElement>fieldLabelCollection[index];
-        //     fieldLabelCollectionResult.push(element.value);
-        //     console.log(element.value);
-        // }
-
-        // for (let index = 0; index < fieldDefaultValueCollection.length; index++) {
-        //     const element = <HTMLInputElement>fieldDefaultValueCollection[index];
-        //     fieldDefaultValueCollectionResult.push(element.value);
-        //     console.log(element.value);
-        // }
-
-        // for (let index = 0; index < fieldTypeCollection.length; index++) {
-        //     const element = <HTMLSelectElement>fieldTypeCollection[index];
-        //     fieldTypeCollectionResult.push(element.value);
-        //     console.log(element.value);
-        // }
-
-
-
 
        this.formCreatorFields.forEach(element => {
             switch (element.fieldType) {
@@ -156,12 +162,12 @@ export class FormCreator {
                     this.fields.push(emailField);
                     break;
                 case 'select':  //select
-                    //const selectField = new SelectField(element.name,element.value,element.label,options);
-                    //this.fields.push(selectField);
+                    const selectField = new SelectField(element.name,element.value,element.label,element.options);
+                    this.fields.push(selectField);
                     break;
                 case 'checkbox':  //checkbox
-                    //const checkboxField = new CheckboxField(element.name,element.value,element.label,options);
-                    //this.fields.push(checkboxField);
+                    const checkboxField = new CheckboxField(element.name,element.value,element.label,element.checkboxOptions);
+                    this.fields.push(checkboxField);
                     break;
                 default:
                     console.log('selected fieldType do not match any possible fieldType');
@@ -171,30 +177,76 @@ export class FormCreator {
         
     }
 
-    initFieldTypeSelection(parentElement: HTMLFormElement):HTMLSelectElement {
-        const result = document.createElement('select');
-        result.addEventListener('change', (event) => {
-            //event.stopImmediatePropagation();
-            if ((<HTMLSelectElement>event.target).value === 'select') {
-                const addOptionBtn = document.createElement('button');
-                let container = document.createElement('div');
-                container.className = `selectOptionField-${this.selectFieldId}`;
+    
 
-                addOptionBtn.textContent = 'add Option';
-                addOptionBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
+    initFieldTypeSelection(parentElement: HTMLDivElement):HTMLSelectElement {
+        const result = document.createElement('select');
+        let previousSelectedFieldType = 'input';
+       
+        result.addEventListener('change', (event) => {
+        
+
+            if (previousSelectedFieldType ===  'select' ) {
+                       
+                if ( (<HTMLSelectElement>event.target).value != 'select') {
+                    const addSelectOptionBtn = parentElement.getElementsByTagName('button')[0];
+                    addSelectOptionBtn.remove();
                     
-                    
-                    console.log(container.className);
-                    
-                    //e.stopImmediatePropagation();
-                    parentElement.appendChild(container);
-                    container.appendChild(this.addOptionForSelectField(container));
-                    
-                    
+                    const selectOptions = parentElement.querySelector('#selectOptionsContainer');
+                    if(selectOptions != null) {
+                        selectOptions.remove();
+                    }
+
+                }
+            } else if (previousSelectedFieldType ===  'checkbox' ) {
+
+                if ( (<HTMLSelectElement>event.target).value != 'checkbox') {
+                    const addCheckboxOptionBtn = parentElement.getElementsByTagName('button')[0];
+                    addCheckboxOptionBtn.remove();
+
+                    const checkboxOptions = parentElement.querySelector('#checkboxOptionsContainer');
+                    if(checkboxOptions != null) {
+                        checkboxOptions.remove();
+                    }
+
+                }
+            }
+
+            previousSelectedFieldType = result.value;
+
+            if ((<HTMLSelectElement>event.target).value === 'select') {
+                const containerForSelectOptions = document.createElement('div');
+                containerForSelectOptions.id = 'selectOptionsContainer';
+
+
+                const addSelectOptionBtn = document.createElement('button');
+                addSelectOptionBtn.textContent = 'Dodaj Opcję';
+                addSelectOptionBtn.addEventListener('click', (evt) => {
+                    evt.preventDefault();
+
+                    parentElement.appendChild(containerForSelectOptions);
+                    containerForSelectOptions.appendChild(this.addOptionForCheckboxField(containerForSelectOptions));
                 });
-                this.selectFieldId++; 
-                parentElement.appendChild(addOptionBtn);
+
+                parentElement.appendChild(addSelectOptionBtn);
+            }
+
+
+            if ((<HTMLSelectElement>event.target).value === 'checkbox') {
+                const containerForCheckboxOptions = document.createElement('div');
+                containerForCheckboxOptions.id = 'checkboxOptionsContainer';
+
+
+                const addCheckboxOptionBtn = document.createElement('button');
+                addCheckboxOptionBtn.textContent = 'Dodaj Opcję';
+                addCheckboxOptionBtn.addEventListener('click', (evt) => {
+                    evt.preventDefault();
+
+                    parentElement.appendChild(containerForCheckboxOptions);
+                    containerForCheckboxOptions.appendChild(this.addOptionForCheckboxField(containerForCheckboxOptions));
+                });
+
+                parentElement.appendChild(addCheckboxOptionBtn);
             }
         });
 
@@ -217,24 +269,59 @@ export class FormCreator {
 
         return result;
     }
+
     
     addOptionForSelectField(parentElement: HTMLDivElement):HTMLDivElement {
-        console.log('addOptionForSelectField function');
-        // const container = document.createElement('div');
-        //to się przyda w momencie jak bd wyciągał wartosci z opcji aby je przekazać jako element tablicu IField
-        // container.className = `selectOptionField-${this.selectFieldId}`;
-        // console.log(container.className);
-
+        console.log('addOptionForOptionField function');
         const container = document.createElement('div');
         
         const option = document.createElement('input');
         option.placeholder = 'Wprowadź opcję...';
         option.id = 'selectOptionField';
 
+        const removeOptionBtn = document.createElement('button');
+        removeOptionBtn.textContent = 'Usuń opcję';
+        removeOptionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.remove();
+            if (parentElement.childNodes.length === 0) {
+                parentElement.remove();
+            }
+        });
+
         parentElement.appendChild(container);
 
 
         container.appendChild(option);
+        container.appendChild(removeOptionBtn);
+
+        return container
+        
+    }
+
+    addOptionForCheckboxField(parentElement: HTMLDivElement):HTMLDivElement {
+        console.log('addOptionForCheckboxField function');
+        const container = document.createElement('div');
+        
+        const option = document.createElement('input');
+        option.placeholder = 'Wprowadź opcję...';
+        option.id = 'checkboxOptionField';
+
+        const removeOptionBtn = document.createElement('button');
+        removeOptionBtn.textContent = 'Usuń opcję';
+        removeOptionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.remove();
+            if (parentElement.childNodes.length === 0) {
+                parentElement.remove();
+            }
+        });
+
+        parentElement.appendChild(container);
+
+
+        container.appendChild(option);
+        container.appendChild(removeOptionBtn);
 
         return container
         
@@ -244,5 +331,6 @@ export class FormCreator {
     saveForm() {
         this.getValues();
         console.log(this.fields);
+        this.locStorage.saveForm(this.fields);
     }
 }

@@ -4,6 +4,9 @@ import { IDataStorage } from "./IDataStorage";
 export class LocStorage implements IDataStorage {
     private id: string;
     private ids: string[] = [];
+    private formId: string;
+    private formIds: string[] = [];
+
     
     
     saveDocuments(formValues: Array<IField>): string {
@@ -13,7 +16,21 @@ export class LocStorage implements IDataStorage {
         localStorage.setItem(this.id.toString(), JSON.stringify(formValues));
         this.ids.push(this.id);
         console.log(localStorage.getItem(this.id));
+        
         return this.id;
+    }
+
+    saveForm(formFields: Array<IField>): string {
+        this.formId = 'form-'+Date.now().toString();
+        localStorage.setItem(this.formId, JSON.stringify(formFields));
+        return this.formId;
+
+    }
+
+    loadForm(id: string): string {
+        const formToReturn = localStorage.getItem(id);
+
+        return formToReturn;
     }
     
     editDocument(id: string, formValues: Array<IField>) {
