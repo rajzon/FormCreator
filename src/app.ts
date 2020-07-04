@@ -1,3 +1,4 @@
+import { LocStorage } from './LocStorage';
 import { FieldLabel } from './FieldLabel';
 import { Form } from "./Form";
 import { IField } from "./IField";
@@ -6,9 +7,14 @@ import { EmailField } from "./EmailField";
 import { SelectField } from "./SelectField";
 import { CheckboxField } from "./CheckboxField";
 import { TextAreaField } from "./TextAreaField";
+import { Router } from './Router';
+import { FieldType } from './FieldType.enum';
 
 export class App {
     container: HTMLElement;
+    locStorage: LocStorage = new LocStorage();
+    formIdFromParams: string;
+
     constructor(container: HTMLElement) {
         // const b = new Form()
         this.container = container;
@@ -17,71 +23,107 @@ export class App {
 
     ShowForm() {
         const fields = this.initFormFields();
-        var form = new Form(fields);
-        form.render(this.container,true);
-        console.log(form.fields);
+        if(this.formIdFromParams != null) {
+            var exampleForm = new Form(fields, this.formIdFromParams);
+            exampleForm.render(this.container,true);
+            console.log(exampleForm.fields);
+
+        } else {   
+            var form = new Form(fields);
+            form.render(this.container,true);
+            console.log(form.fields);
+        }
+        
     }
 
     initFormFields() : Array<IField> {
         let fields = new Array<IField>();
-        const options = this.initOptions();
-        const checkboxOptions = this.initCheckboxOptions();
+        this.formIdFromParams = Router.getParam('formId');
 
-        fields.push(new InputField("Imię" , "Wprowadź imię","name"),
-                    new InputField("Nazwisko" , "Wprowadź nazwisko" , "surName"),
-                    new EmailField("E-mail" , "Wprowadź mail", "email"),
-                    new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek","study",options),
-                    new CheckboxField("Czy preferujesz e-learning" , "Domyślny tekst","elearning", checkboxOptions),
-                    new TextAreaField("Uwagi" , "Domyślny tekst", "comment"),
-        );
+        if(this.formIdFromParams != null) {
+            const formFromLocStorage = this.locStorage.loadForm(this.formIdFromParams);
+            fields = this.parseFormFromLocStorageAsField(formFromLocStorage);
+
+        } else { 
+
+            const options = this.initOptions();
+            const checkboxOptions = this.initCheckboxOptions();
+
+            fields.push(new InputField("Imię" , "Wprowadź imię","name"),
+                        new InputField("Nazwisko" , "Wprowadź nazwisko" , "surName"),
+                        new EmailField("E-mail" , "Wprowadź mail", "email"),
+                        new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek","study",options),
+                        new CheckboxField("Czy preferujesz e-learning" , "Domyślny tekst","elearning", checkboxOptions),
+                        new TextAreaField("Uwagi" , "Domyślny tekst", "comment"),
+            );
+        }
 
         return fields;
     }
 
-    initOptions(optionsNum?: number, value?: string ) : Array<string> {
+    initOptions() : Array<string> {
         let result = new Array<string>();
 
-        if(optionsNum == null && value == null) {
-            // const opt1 = document.createElement('option');
-            // opt1.text = "Informatyka i Ekonometria";
-            // const opt2 = document.createElement('option');
-            // opt2.text = "Zarządzanie i Bankowość";
-            // const opt3 = document.createElement('option');
-            // opt3.text = "Medycyna";
-            const opt1 = "Informatyka i Ekonometria";
-            const opt2 = "Zarządzanie i Bankowość";
-            const opt3 = "Medycyna";
+        
+        const opt1 = "Informatyka i Ekonometria";
+        const opt2 = "Zarządzanie i Bankowość";
+        const opt3 = "Medycyna";
 
-            result.push(opt1);
-            result.push(opt2);
-            result.push(opt3);
-        } else {
-            console.log('placeholder for initOptions');
-        }
+        result.push(opt1);
+        result.push(opt2);
+        result.push(opt3);
+       
         
         return result;
     }
 
-    initCheckboxOptions(optionsNum?: number, value?: string, fieldLabel?: FieldLabel) : Array<string> {
+    initCheckboxOptions() : Array<string> {
         let result = new Array<string>();
-        if (optionsNum == null && value == null) {
-            // const opt1 = document.createElement('input');
-            // opt1.type = 'checkbox';
-            // opt1.value = 'Yes';
-            // const opt2 = document.createElement('input');
-            // opt2.type = 'checkbox';
-            // opt2.value = 'No';
-            const opt1 = 'Yes';
-            const opt2 = 'No';
+        
+        const opt1 = 'Yes';
+        const opt2 = 'No';
 
-            result.push(opt1);
-            result.push(opt2);
-        } else {
-            console.log('placeholder for initCheckboxOptions');
-        }
+        result.push(opt1);
+        result.push(opt2);
+        
         console.log(result);
         return result;
     }
+
+    private parseFormFromLocStorageAsField(formFromLocStorage: Array<IField>): Array<IField> {
+        let docToReturn = new Array<IField>();
+        formFromLocStorage.forEach(element => {
+             switch (element.fieldType) {
+                 case FieldType.checkboxField:
+                     var checkboxField = element as CheckboxField;
+                     element = new CheckboxField(element.name,element.value,element.label, checkboxField.checkboxOptions);
+                     docToReturn.push(element);
+                     break;
+                 case FieldType.email:
+                     element = new EmailField(element.name,element.value, element.label);
+                     docToReturn.push(element);
+                     break;
+                 case FieldType.multiLineField:
+                     element = new TextAreaField(element.name,element.value, element.label);
+                     docToReturn.push(element);
+                     break;
+                 case FieldType.selectField:
+                     var selectField =  element as SelectField;
+                     element = new SelectField(element.name,element.value, element.label,selectField.options);
+                     docToReturn.push(element);
+                     break;
+                 case FieldType.textField:
+                     element = new InputField(element.name,element.value, element.label);
+                     docToReturn.push(element);
+                     break;          
+                 default:
+                     console.log(`Element ${element} , wasn't be able to convert to FieldType: ${element.fieldType} 
+                                 becouse that type do not match what convert function is able to do.`)
+                     break;
+             }
+         });
+         return docToReturn;
+     }
 }
 
 

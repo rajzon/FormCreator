@@ -22,11 +22,17 @@ export class DocumentList {
         const idsFromLocStorage = this.locStorage.getDocuments();
         console.log(idsFromLocStorage);
         this.model.id = new Array<string>();
-        idsFromLocStorage.forEach(element => {
-           this.model.id.push(element);
-           this.model.documents = localStorage.getItem(element);
-            console.log(this.model.documents);
-        });
+        if (idsFromLocStorage != null) {
+            
+        
+            idsFromLocStorage.forEach(element => {
+            this.model.id.push(element);
+            this.model.documents = localStorage.getItem(element);
+                console.log(this.model.documents);
+            });
+        } else {
+            console.log('documents not found');
+        }
         
     }
 
@@ -48,24 +54,24 @@ export class DocumentList {
                     docToReturn.push(element);
                     break;
                 case FieldType.email:
-                    element = new EmailField(element.name, element.value, element.label);
+                    element = new EmailField(element.name,element.value, element.label);
                     docToReturn.push(element);
                     break;
                 case FieldType.multiLineField:
-                    element = new TextAreaField(element.name, element.value, element.label);
+                    element = new TextAreaField(element.name,element.value, element.label);
                     docToReturn.push(element);
                     break;
                 case FieldType.selectField:
                     var selectField =  element as SelectField;
-                    element = new SelectField(element.name, element.value, element.label,selectField.options);
+                    element = new SelectField(element.name,element.value, element.label,selectField.options);
                     docToReturn.push(element);
                     break;
                 case FieldType.textField:
-                    element = new InputField(element.name, element.value, element.label);
+                    element = new InputField(element.name,element.value, element.label);
                     docToReturn.push(element);
                     break;
                 case FieldType.date:
-                    element = new DateField(element.name, element.value, element.label);
+                    element = new DateField(element.name,element.value, element.label);
                     docToReturn.push(element);
                     break;
                 default:

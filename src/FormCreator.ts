@@ -32,7 +32,7 @@ export class FormCreator {
         this.fieldId = 1;
     }
 
-    newForm(parentElement: HTMLElement, fields?: Array<IField>) {
+    newForm(parentElement: HTMLElement) {
 
         this.form = document.createElement('form');
         parentElement.appendChild(this.form);
@@ -48,17 +48,15 @@ export class FormCreator {
         this.fieldName = document.createElement('input');
         this.fieldName.placeholder = 'Nazwa pola...';
         this.fieldName.id = 'fieldName';
-        this.fieldName.className = 'test';
+
 
         this.fieldLabel = document.createElement('input');
         this.fieldLabel.placeholder = 'Nazwa etykiety...';
         this.fieldLabel.id = 'fieldLabel';
-        this.fieldLabel.className = 'test';
 
         this.fieldDefaultValue = document.createElement('input');
         this.fieldDefaultValue.placeholder = 'Domyślna wartość...';
         this.fieldDefaultValue.id = 'fieldDefaultValue';
-        this.fieldDefaultValue.className = 'test';
 
         this.fieldType = this.initFieldTypeSelection(rowContainer);
         this.fieldType.id = 'fieldType';
@@ -78,30 +76,13 @@ export class FormCreator {
     }
 
     getValues() {
-        // let fieldNameCollectionResult = new Array<string>();
-        // let fieldLabelCollectionResult = new Array<string>();
-        // let fieldDefaultValueCollectionResult = new Array<string>();
-        // let fieldTypeCollectionResult = new Array<string>();
-
-        // const fieldName = <HTMLInputElement>document.getElementById('fieldName');
-        // const fieldLabel = <HTMLInputElement>document.getElementById('fieldLabel');
-        // const fieldDefaultValue = <HTMLInputElement>document.getElementById('fieldDefaultValue');
-        // const fieldType = <HTMLSelectElement>document.getElementById('fieldType');
-
-       
-
-        
-
-        
-        const testFieldType = document.getElementsByClassName('fieldType');
+      
         const fieldNameCollection = document.querySelectorAll('#fieldName');
         const fieldLabelCollection = document.querySelectorAll('#fieldLabel');
         const fieldDefaultValueCollection = document.querySelectorAll('#fieldDefaultValue');
         const fieldTypeCollection = document.querySelectorAll('.fieldType');
 
         
-
-        console.log(testFieldType);
         console.log(fieldNameCollection);
         console.log(fieldTypeCollection);
 
@@ -327,8 +308,39 @@ export class FormCreator {
         
     }
 
+    renderFormList(parentElement: HTMLElement): void {
+       let result = this.locStorage.getForms();
 
-    saveForm() {
+       result.forEach(element => {
+            const formLink = document.createElement('a');
+            formLink.innerHTML = element;
+            formLink.href = `new-document.html?formId=${element}`;
+            const formIdContainer = document.createElement('div');
+
+            
+
+            parentElement.appendChild(formIdContainer);
+            parentElement.appendChild(document.createElement('br'));
+            formIdContainer.appendChild(formLink);
+
+            
+        });
+
+        const goToMainMenuBtn = document.createElement('button');
+            goToMainMenuBtn.textContent = 'Menu główne';
+            goToMainMenuBtn.addEventListener('click', () => {
+                window.location.href = 'index.html';
+        });
+
+        parentElement.appendChild(goToMainMenuBtn);
+
+    }
+
+    
+    
+
+
+    saveForm(fields?: Array<IField>) {
         this.getValues();
         console.log(this.fields);
         this.locStorage.saveForm(this.fields);

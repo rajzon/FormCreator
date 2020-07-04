@@ -3,9 +3,7 @@ import { IDataStorage } from "./IDataStorage";
 
 export class LocStorage implements IDataStorage {
     private id: string;
-    private ids: string[] = [];
-    private formId: string;
-    private formIds: string[] = [];
+
 
     
     
@@ -14,25 +12,62 @@ export class LocStorage implements IDataStorage {
         this.id=Date.now().toString();
         console.log(formValues);
         localStorage.setItem(this.id.toString(), JSON.stringify(formValues));
-        this.ids.push(this.id);
+        this.appendDocId(this.id);
         console.log(localStorage.getItem(this.id));
         
         return this.id;
     }
 
-    saveForm(formFields: Array<IField>): string {
-        this.formId = 'form-'+Date.now().toString();
-        localStorage.setItem(this.formId, JSON.stringify(formFields));
-        return this.formId;
+    appendDocId(id: string) {
+        let docsIdsFromLocStorage = <Array<string>>(JSON.parse(localStorage.getItem('docsIds')));   
+        console.log(docsIdsFromLocStorage);
+        if(docsIdsFromLocStorage == null) {
+            docsIdsFromLocStorage = new Array<string>();
+        }
 
+        docsIdsFromLocStorage.push(id);
+        console.log(docsIdsFromLocStorage);
+        localStorage.setItem('docsIds', JSON.stringify(docsIdsFromLocStorage));
     }
 
-    loadForm(id: string): string {
-        const formToReturn = localStorage.getItem(id);
+    saveForm(formFields: Array<IField>): string {
+        let idNum = 1;
+        let formId = 'form-' + idNum;
+        while (localStorage.getItem(formId) != null) {
+            idNum++;
+            formId = 'form-' + idNum;
+        }
+
+        localStorage.setItem(formId, JSON.stringify(formFields));
+        this.appendFormId(formId);
+        return formId;
+    }
+
+    appendFormId(id: string): void {
+        let formIdsFromLocStorage = <Array<string>>(JSON.parse(localStorage.getItem('formsIds')));   
+        console.log(formIdsFromLocStorage);
+        if(formIdsFromLocStorage == null) {
+            formIdsFromLocStorage = new Array<string>();
+        }
+
+        formIdsFromLocStorage.push(id);
+        console.log(formIdsFromLocStorage);
+        localStorage.setItem('formsIds', JSON.stringify(formIdsFromLocStorage));
+        
+    }
+
+    loadForm(id: string): Array<IField> {
+        const formToReturn = <Array<IField>>(JSON.parse(localStorage.getItem(id)));
 
         return formToReturn;
     }
-    
+
+    getForms(): string[] {
+        let formIdsToReturn = JSON.parse(localStorage.getItem('formsIds'));
+
+        return formIdsToReturn;
+    }
+     
     editDocument(id: string, formValues: Array<IField>) {
         const valuesToEdit = JSON.stringify(formValues);
         localStorage.setItem(id,valuesToEdit);
@@ -50,13 +85,28 @@ export class LocStorage implements IDataStorage {
     }
 
     getDocuments(): string[] {
-        let idsToReturn = Object.keys(localStorage);
-        return idsToReturn;
+        let docsIdsToReturn = <Array<string>>JSON.parse(localStorage.getItem('docsIds'));
+        return docsIdsToReturn;
     }
 
     removeDocument(id: string) {
         if (localStorage.getItem(id).length > 0){
-         localStorage.removeItem(id);
+         let docIds = <Array<string>>JSON.parse(localStorage.getItem('docsIds'));
+         const docIdIndex = docIds.indexOf(id);
+         console.log(docIdIndex);
+
+         if (docIdIndex !== -1) {
+           docIds.splice(docIdIndex, 1);
+
+            if(docIds.length > 0) {
+            localStorage.setItem('docsIds',docIds.toString());
+            } else {
+                localStorage.removeItem('docsIds');
+            }
+        }
+
+
+         localStorage.removeItem(id);       
          if(localStorage.getItem(id) == null) {
          console.log(`selected document:${id} - deleted successfully`);
          } else {

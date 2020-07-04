@@ -1,3 +1,4 @@
+import { LocStorage } from './LocStorage';
 import { IField } from './IField';
 import { FormCreator } from './FormCreator';
 import { DocumentList } from './DocumentList';
@@ -8,6 +9,7 @@ import { Form } from './Form';
 const container = document.createElement('div');
 const routerIdParam = Router.getParam('id');
 const documents = new DocumentList();
+const locStorage = new LocStorage();
 
 console.log(routerIdParam);
 const documentToEdit = documents.getDocument(routerIdParam);

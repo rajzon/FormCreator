@@ -33,12 +33,17 @@ export class CheckboxField implements IField {
             var checkboxFieldLabel = document.createElement('label');
             checkboxFieldLabel.textContent = element;
 
+            console.log(this.checkboxOptions);
 
             //Checking if the user already pass the value that exits in chceckboxes
             //if it is , set that value as selected option
-            if(opt.value === this.value) {
-                opt.checked = true;
-            }
+            const valuesAsArray = this.value.split(',');
+            valuesAsArray.forEach(element => {
+                if(opt.value === element) {
+                    opt.checked = true;
+                }
+            });
+            
 
             parentElement.appendChild(checkboxFieldLabel);
             parentElement.appendChild(opt);
@@ -54,15 +59,17 @@ export class CheckboxField implements IField {
     getValue()  {
         this.value ="";
         var input = <HTMLCollectionOf<HTMLInputElement>>document.getElementsByClassName(this.label);
+        console.log(input.length);
         for (let index = 0; index < input.length; index++) {
 
             if(input[index].checked) {
-            this.value += input[index].value;
-                return this.value;
-            }            
+            this.value += input[index].value + ',';
+            
+            }
+            
+            
         }
-        
 
-      
+        return this.value;
       }
 }

@@ -1,37 +1,22 @@
-import { FieldType } from './FieldType.enum';
 import { IField } from "./IField";
-import { InputField } from "./InputField";
-import { EmailField } from "./EmailField";
-import { SelectField } from "./SelectField";
-import { CheckboxField } from "./CheckboxField";
-import { TextAreaField } from "./TextAreaField";
 import { LocStorage } from "./LocStorage";
 import { Router } from './Router';
 
 export class Form {
     fields: Array<IField>;
     id: string;
-    // public nameField: InputField;
-    // surNameField: InputField;
-    // emailField: EmailField;
-    // studyField: SelectField;
-    // elearningAnswearField: CheckboxField;
-    // commentField: TextAreaField;
-    locStorage: LocStorage = new LocStorage();
-    formId: string;
 
-    constructor(fields: Array<IField>) {  
+    locStorage: LocStorage = new LocStorage();
+
+    constructor(fields: Array<IField>, id?: string) {  
         this.fields = new Array<IField>();
 
-        // this.fields.push(this.nameField = new InputField("Imię" , "Wprowadź imię","name"),
-        //                  this.surNameField = new InputField("Nazwisko" , "Wprowadź nazwisko" , "surName"),
-        //                  this.emailField =  new EmailField("E-mail" , "Wprowadź mail", "email"),
-        //                  this.studyField = new SelectField("Wybrany kierunek studiów" , "Wprowadź kierunek","study"),
-        //                  this.elearningAnswearField  = new CheckboxField("Czy preferujesz e-learning" , "Domyślny tekst","elearning"),
-        //                  this.commentField = new TextAreaField("Uwagi" , "Domyślny tekst", "comment"),
-                         
+        if(id != null) {
+            this.id = id;
+            console.log(this.id);
+        }
 
-        // );
+
         this.fields = fields;
         console.log(this.fields);
     }
@@ -44,14 +29,6 @@ export class Form {
             test.push(this.fields.find(m => m.fieldType === element.fieldType && m.label === element.label).value);
         });
 
-        // this.fields.find(n => n.fieldType === FieldType.textField && n.label === 'name').value = this.nameField.getValue();
-        // this.fields.find(n => n.fieldType === FieldType.textField && n.label === 'surName').value = this.surNameField.getValue();
-        // this.fields.find(n => n.fieldType === FieldType.email).value = this.emailField.getValue();
-        // this.fields.find(n => n.fieldType === FieldType.multiLineField).value = this.commentField.getValue();
-        // this.fields.find(n => n.fieldType === FieldType.checkboxField).value = this.elearningAnswearField.getValue();
-        // this.fields.find(n => n.fieldType === FieldType.selectField).value = this.studyField.getValue();
-        //console.log(val);    
-        //console.log(this.nameField.value);
             alert(`${test}`);
         
             
@@ -76,6 +53,12 @@ export class Form {
          
         var formContainer = document.createElement('form');
 
+        if (this.id != null) {
+            const formName = document.createElement('h2');
+            formName.textContent = `ID:${this.id}`;
+            parentElement.appendChild(formName);
+        }
+ 
         parentElement.appendChild(formContainer);
 
         console.log(this.fields);
