@@ -25,6 +25,7 @@ export class CheckboxField implements IField {
             nameLabel.DisplayLabel(parentElement);
         console.log(this.checkboxOptions);
 
+
         this.checkboxOptions.forEach(element => {
             const opt = document.createElement('input');
             opt.type = 'checkbox';

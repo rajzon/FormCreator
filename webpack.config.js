@@ -4,11 +4,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: {
-    newDocIndex: "./src/newDocIndex.ts",
-    docList: "./src/docListIndex.ts",
-    editDocIndex: "./src/editDocIndex.ts",
-    newFormIndex: "./src/newFormIndex.ts",
-    formList: "./src/formListIndex.ts"
+    index: "./src/index.ts"
   },
   output: {
     filename: "[name].js",

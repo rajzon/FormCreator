@@ -89,6 +89,12 @@ export class DocumentList {
 
     render(parentElement:HTMLElement) {
         console.log(this.model.id);
+
+        const goToMenuBtn = document.createElement('button');
+        goToMenuBtn.textContent = 'Menu Główne'
+        goToMenuBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
         
         this.model.id.forEach((element: any) => {
             let documentsInfo = document.createElement('a');
@@ -107,7 +113,12 @@ export class DocumentList {
             parentElement.appendChild(deleteDocButton);
             parentElement.appendChild(document.createElement('br'));
             parentElement.appendChild(document.createElement('br'));
+
+            
         });
+    
+        parentElement.appendChild(document.createElement('br'));
+        parentElement.appendChild(goToMenuBtn);
        
     }
 }

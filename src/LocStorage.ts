@@ -99,7 +99,7 @@ export class LocStorage implements IDataStorage {
            docIds.splice(docIdIndex, 1);
 
             if(docIds.length > 0) {
-            localStorage.setItem('docsIds',docIds.toString());
+            localStorage.setItem('docsIds',JSON.stringify(docIds));
             } else {
                 localStorage.removeItem('docsIds');
             }

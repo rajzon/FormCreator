@@ -65,7 +65,7 @@ export class Form {
         this.fields.forEach( (element: IField) => {
             element.render(formContainer);
         });
-            //console.log(this.nameField.value);
+            
             
         if (creationMode == true) 
         {
@@ -78,8 +78,7 @@ export class Form {
             closeButton.type='button';
             closeButton.value='Wstecz';
             closeButton.addEventListener('click',() => {
-                //do poprawy
-                //window.location.href = 'Index.html'
+                window.location.href = 'Index.html'
             });
 
             
@@ -101,6 +100,6 @@ export class Form {
             this.getValue();
             this.locStorage.editDocument(idFromURL,this.fields);
         }
-       // window.location.href = 'Index.html'
+        window.location.href = 'Index.html'
     }
 }

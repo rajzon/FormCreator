@@ -21,6 +21,9 @@ export class SelectField implements IField {
         var selectField = document.createElement('select');
         selectField.id = this.label;
 
+        
+
+
         //Name Label
         const nameLabel = new FieldLabel(this.name);
             nameLabel.DisplayLabel(parentElement , selectField.id);
@@ -29,7 +32,9 @@ export class SelectField implements IField {
               
          parentElement.appendChild(selectField);  
 
-         //Dodawanie Opcji wyboru kirunku studiów
+
+
+
         this.options.forEach(element => {
             const opt = document.createElement('option');
             opt.text = element

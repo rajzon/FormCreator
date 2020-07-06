@@ -4,11 +4,8 @@ import { TextAreaField } from './TextAreaField';
 import { SelectField } from './SelectField';
 import { InputField } from './InputField';
 import { CheckboxField } from './CheckboxField';
-import { FieldType } from './FieldType.enum';
 import { IField } from './IField';
 import { LocStorage } from './LocStorage';
-import { Form } from './Form';
-import { Router } from './Router';
 import { IFormCreatorField } from './IFormCreatorField';
 export class FormCreator {
     form: HTMLFormElement;
@@ -75,7 +72,7 @@ export class FormCreator {
         this.fieldId++;
     }
 
-    getValues() {
+    getValues(): void {
       
         const fieldNameCollection = document.querySelectorAll('#fieldName');
         const fieldLabelCollection = document.querySelectorAll('#fieldLabel');
@@ -97,19 +94,28 @@ export class FormCreator {
 
 
                 const currentFieldRow = fieldNameCollection[index].parentElement;
+                console.log(fieldType.value);
                 if(fieldType.value === 'select') {
                     const selectOptions = currentFieldRow.querySelector('#selectOptionsContainer');
                     let optionsForCurrentSelect = Array<string>();
 
+                    //setting defualt value
+                    optionsForCurrentSelect.push(fieldDefaultValue.value);
+                    console.log(fieldDefaultValue.value);
+
                     selectOptions.childNodes.forEach(el => {
                         optionsForCurrentSelect.push((<HTMLInputElement>el.firstChild).value)
-                    }); 
+                    });
+                    ; 
 
                     this.formCreatorFields.push(new FormCreatorField(fieldName.value, fieldLabel.value, fieldDefaultValue.value,fieldType.value,optionsForCurrentSelect))
                 } 
                 else if (fieldType.value === 'checkbox') { 
                     const checkboxOptions = currentFieldRow.querySelector('#checkboxOptionsContainer');
                     let optionsForCurrentCheckbox = Array<string>();
+
+                    //setting defualt value
+                    optionsForCurrentCheckbox.push(fieldDefaultValue.value);
 
                     checkboxOptions.childNodes.forEach(el => {
                         optionsForCurrentCheckbox.push((<HTMLInputElement>el.firstChild).value)
