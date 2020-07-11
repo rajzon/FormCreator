@@ -96,7 +96,7 @@ export class DocumentList {
             documentsInfo.href = `edit-document.html?id=${element}`;
             
             let deleteDocButton = document.createElement('button');
-            deleteDocButton.textContent = 'Delete Document';
+            deleteDocButton.textContent = 'Usuń Dokument';
 
             deleteDocButton.addEventListener('click',() => {
                 this.removeDocument(element);

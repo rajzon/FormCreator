@@ -40,14 +40,14 @@ function initNewForm() {
     formCreator.newForm(container);
 
     const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save Form';
+    saveBtn.textContent = 'Zapisz Formularz';
     saveBtn.addEventListener('click', () => {
         formCreator.saveForm();
         window.location.href = 'index.html';
     });
 
     const addFieldBtn = document.createElement('button');
-    addFieldBtn.textContent = 'Add Next Field';
+    addFieldBtn.textContent = 'Dodaj następne pole';
     addFieldBtn.addEventListener('click', () => {
         formCreator.addRowToFormCreator(formCreator.form);
     });
@@ -99,7 +99,7 @@ function initEditDocument() {
 
 
     const editButton = document.createElement('button');
-    editButton.textContent = 'Edit Document';
+    editButton.textContent = 'Edytuj Dokument';
     editButton.addEventListener('click', () => {
         
             if (form.save(false)) {

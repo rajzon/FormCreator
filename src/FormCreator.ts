@@ -319,20 +319,28 @@ export class FormCreator {
     renderFormList(parentElement: HTMLElement): void {
        let result = this.locStorage.getForms();
 
-       result.forEach(element => {
-            const formLink = document.createElement('a');
-            formLink.innerHTML = element;
-            formLink.href = `new-document.html?formId=${element}`;
-            const formIdContainer = document.createElement('div');
+       if (result != null) {
+        result.forEach(element => {
+                const formLink = document.createElement('a');
+                formLink.innerHTML = element;
+                formLink.href = `new-document.html?formId=${element}`;
+                const formIdContainer = document.createElement('div');
 
-            
+                let deleteFormButton = document.createElement('button');
+                deleteFormButton.textContent = 'Usuń Formularz';
 
-            parentElement.appendChild(formIdContainer);
-            parentElement.appendChild(document.createElement('br'));
-            formIdContainer.appendChild(formLink);
+                deleteFormButton.addEventListener('click',() => {
+                    this.locStorage.removeForm(element);
+                    window.location.reload();
+                });       
 
-            
-        });
+                parentElement.appendChild(formIdContainer);
+                formIdContainer.appendChild(formLink);
+                formIdContainer.appendChild(deleteFormButton);
+                parentElement.appendChild(document.createElement('br'));
+         
+            });
+       }   
 
         const goToMainMenuBtn = document.createElement('button');
             goToMainMenuBtn.textContent = 'Menu główne';
@@ -340,6 +348,7 @@ export class FormCreator {
                 window.location.href = 'index.html';
         });
 
+        console.log('test');
         parentElement.appendChild(goToMainMenuBtn);
 
     }

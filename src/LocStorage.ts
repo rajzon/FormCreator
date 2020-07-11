@@ -113,4 +113,30 @@ export class LocStorage implements IDataStorage {
         }
         
     }
+
+    removeForm(id: string) {
+        if (localStorage.getItem(id).length > 0){
+            let formIds = <Array<string>>JSON.parse(localStorage.getItem('formsIds'));
+            const formIdIndex = formIds.indexOf(id);
+            console.log(formIdIndex);
+   
+            if (formIdIndex !== -1) {
+                formIds.splice(formIdIndex, 1);
+   
+               if(formIds.length > 0) {
+                    localStorage.setItem('formsIds',JSON.stringify(formIds));
+               } else {
+                   localStorage.removeItem('formsIds');
+               }
+           }
+   
+   
+            localStorage.removeItem(id);       
+            if(localStorage.getItem(id) == null) {
+            console.log(`selected form template:${id} - deleted successfully`);
+            } else {
+                console.log(`something went wrong during deleting  form template:${id}`);
+            }
+           }
+    }
 }
