@@ -1,3 +1,4 @@
+import { FieldType } from './FieldType.enum';
 import { IField } from "./IField";
 import { LocStorage } from "./LocStorage";
 import { Router } from './Router';
@@ -7,6 +8,8 @@ export class Form {
     id: string;
 
     locStorage: LocStorage = new LocStorage();
+    mailValid: boolean;
+    
 
     constructor(fields: Array<IField>, id?: string) {  
         this.fields = new Array<IField>();
@@ -18,6 +21,7 @@ export class Form {
 
 
         this.fields = fields;
+        this.mailValid = true;
         console.log(this.fields);
     }
 
@@ -26,7 +30,17 @@ export class Form {
         let test = Array<string>();
         this.fields.forEach(element => {
             this.fields.find(m => m.fieldType === element.fieldType && m.label === element.label).value = element.getValue();
-            test.push(this.fields.find(m => m.fieldType === element.fieldType && m.label === element.label).value);
+            
+            console.log(element.value);
+           if (element.fieldType === FieldType.email && element.value == null ) {
+               this.mailValid = false;
+           } else if (element.fieldType === FieldType.email) {
+                this.mailValid = true;
+                test.push(this.fields.find(m => m.fieldType === element.fieldType && m.label === element.label).value);
+           } else {
+                test.push(this.fields.find(m => m.fieldType === element.fieldType && m.label === element.label).value);
+           }
+            
         });
 
             alert(`${test}`);
@@ -88,18 +102,33 @@ export class Form {
 
     }  
     
-    save(creationMode: boolean): void {
+    save(creationMode: boolean): boolean {
         console.log('test from save method');
+
         if (creationMode === true) {
-        console.log(this.fields);
-        this.locStorage.saveDocuments(this.fields);
+            console.log(this.fields);
+            console.log(this.mailValid);
+            if(this.mailValid) {
+                this.locStorage.saveDocuments(this.fields);
+                window.location.href = 'Index.html'
+                return true;
+            }
+
         } else {
             console.log('edit Mode')
             console.log(this.fields);
             const idFromURL = Router.getParam('id');
             this.getValue();
-            this.locStorage.editDocument(idFromURL,this.fields);
+
+
+            console.log(this.mailValid);
+            if (this.mailValid) {
+                this.locStorage.editDocument(idFromURL,this.fields);
+                window.location.href = 'Index.html'
+                return true;
+            }
         }
-        window.location.href = 'Index.html'
+
+        return false;
     }
 }

@@ -37,11 +37,20 @@ export class EmailField implements IField {
 
        
     }
+    validEmail(email: string) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    };
 
     getValue()  {
-        var input = <HTMLInputElement>document.getElementById(this.label);          
+        var input = <HTMLInputElement>document.getElementById(this.label);  
         this.value = input.value;
+        if(this.validEmail(this.value)) {
         return this.value;
+        } else {
+            alert('niepoprawna forma Email - spróbuj ponownie!');
+            
+        }
       
       }
 }

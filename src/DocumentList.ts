@@ -1,4 +1,3 @@
-import { DateField } from './DateField';
 import { InputField } from './InputField';
 import { SelectField } from './SelectField';
 import { TextAreaField } from './TextAreaField';
@@ -6,7 +5,6 @@ import { EmailField } from './EmailField';
 import { CheckboxField } from './CheckboxField';
 import { FieldType } from './FieldType.enum';
 import { LocStorage } from "./LocStorage";
-import { runInThisContext } from "vm";
 import { IField } from "./IField";
 
 export class DocumentList {
@@ -68,10 +66,6 @@ export class DocumentList {
                     break;
                 case FieldType.textField:
                     element = new InputField(element.name,element.value, element.label);
-                    docToReturn.push(element);
-                    break;
-                case FieldType.date:
-                    element = new DateField(element.name,element.value, element.label);
                     docToReturn.push(element);
                     break;
                 default:

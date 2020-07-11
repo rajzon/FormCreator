@@ -43,6 +43,7 @@ function initNewForm() {
     saveBtn.textContent = 'Save Form';
     saveBtn.addEventListener('click', () => {
         formCreator.saveForm();
+        window.location.href = 'index.html';
     });
 
     const addFieldBtn = document.createElement('button');
@@ -100,9 +101,15 @@ function initEditDocument() {
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit Document';
     editButton.addEventListener('click', () => {
-        form.save(false);
-        console.log('form saved');
-        window.location.href = 'document-list.html';
+        
+            if (form.save(false)) {
+                console.log('form saved');
+                window.location.href = 'document-list.html';
+            } else {
+                alert('Formularz nie został zedytowany z powodu błędnego formatu maila - proszę spróbować jeszcze raz');
+            }
+ 
+        
     });
 
     const goToMenuBtn = document.createElement('button');

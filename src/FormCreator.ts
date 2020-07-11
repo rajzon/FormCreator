@@ -7,6 +7,7 @@ import { CheckboxField } from './CheckboxField';
 import { IField } from './IField';
 import { LocStorage } from './LocStorage';
 import { IFormCreatorField } from './IFormCreatorField';
+
 export class FormCreator {
     form: HTMLFormElement;
     fieldName: HTMLInputElement;
@@ -15,7 +16,7 @@ export class FormCreator {
     fieldType: HTMLSelectElement;
     fields: Array<IField>;
     formCreatorFields: Array<IFormCreatorField>;
-    locStorage: LocStorage = new LocStorage();
+    locStorage: LocStorage = new LocStorage();  
 
     fieldId: number;
 
@@ -24,6 +25,7 @@ export class FormCreator {
     constructor() {
         this.fields = new Array<IField>(); 
         this.formCreatorFields = new Array<IFormCreatorField>();
+
 
 
         this.fieldId = 1;

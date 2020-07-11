@@ -4,9 +4,7 @@ import { IDataStorage } from "./IDataStorage";
 export class LocStorage implements IDataStorage {
     private id: string;
 
-
-    
-    
+  
     saveDocuments(formValues: Array<IField>): string {
         console.log('test');
         this.id=Date.now().toString();
